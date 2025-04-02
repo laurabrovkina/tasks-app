@@ -1,11 +1,17 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import type { Task } from './types';
 import TaskForm from './components/TaskForm.vue';
 import TaskList from './components/TaskList.vue';
 
 const message = ref("Tasks App");
 const tasks = ref<Task[]>([]);
+
+// it only recalculates when dependency is changed
+// in this case it has only one dependency which is tasks
+const totalDone = computed(() => tasks
+    .value
+    .reduce((total, task) => task.done ? total + 1 : total, 0));
 
 function addTask(newTask: string) {
   tasks.value.push({
@@ -21,6 +27,13 @@ function toggleDone(id: string){
     task.done = !task.done;
   }
 }
+
+function removeTask(id: string){
+  const index = tasks.value.findIndex((task) => task.id === id);
+  if (index !== -1){
+    tasks.value.splice(index, 1);
+  }
+}
 </script>
 
 <template>
@@ -28,8 +41,8 @@ function toggleDone(id: string){
     <h1>{{ message }}</h1>
     <TaskForm @add-task="addTask" />
     <h3 v-if="!tasks.length">Add a task to get started.</h3>
-    <h3 v-else> 0 / {{ tasks.length }} tasks completed</h3>
-    <TaskList :tasks="tasks" @toggle-done="toggleDone" />
+    <h3 v-else> {{ totalDone }} / {{ tasks.length }} tasks completed</h3>
+    <TaskList :tasks="tasks" @toggle-done="toggleDone" @remove-task="removeTask" />
   </main>
 </template>
 
