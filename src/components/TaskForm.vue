@@ -38,3 +38,10 @@ function formSubmitted() {
         </div>
     </form>
 </template>
+
+<style>
+.button-container{
+  display: flex;
+  justify-content: end;
+}
+</style>

@@ -14,6 +14,13 @@ function addTask(newTask: string) {
     done: false
   })
 }
+
+function toggleDone(id: string){
+  const task = tasks.value.find((task) => task.id === id);
+  if(task){
+    task.done = !task.done;
+  }
+}
 </script>
 
 <template>
@@ -22,7 +29,7 @@ function addTask(newTask: string) {
     <TaskForm @add-task="addTask" />
     <h3 v-if="!tasks.length">Add a task to get started.</h3>
     <h3 v-else> 0 / {{ tasks.length }} tasks completed</h3>
-    <TaskList :tasks="tasks" />
+    <TaskList :tasks="tasks" @toggle-done="toggleDone" />
   </main>
 </template>
 
@@ -30,11 +37,5 @@ function addTask(newTask: string) {
 main {
   max-width: 800px;
   margin: 1rem auto;
-}
-
-
-.button-container{
-  display: flex;
-  justify-content: end;
 }
 </style>
