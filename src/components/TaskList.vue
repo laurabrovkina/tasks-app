@@ -41,6 +41,7 @@ const emits = defineEmits<{
   text-decoration: line-through;
 }
 
+.task-list-move, /* apply transition to moving elements */
 .task-list-enter-active,
 .task-list-leave-active {
   transition: all 0.5s ease;
@@ -49,5 +50,10 @@ const emits = defineEmits<{
 .task-list-leave-to {
   opacity: 0;
   transform: translateX(300px);
+}
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.task-list-leave-active {
+  position: absolute;
 }
 </style>
